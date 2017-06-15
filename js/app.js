@@ -8,6 +8,7 @@ var cargarPagina = function () {
     cargarTareas();
     $("#add-form").submit(agregarTarea);
     $(document).on("click",".removerTarea",eliminarTarea);
+    $(document).on("click",".tareas",datosDeTareas);
 };
 
 var cargarTareas = function () {
@@ -71,6 +72,7 @@ var eliminarTarea = function(){
     
     //esto es  para  eliminar  tarea  del html
     tomarPadre.remove();
+    
     //eliminar tarea  del  servidor 
     
     $.ajax({
@@ -82,6 +84,33 @@ var eliminarTarea = function(){
     });
     
 };
+var datosDeTareas = function(){
+    
+    var dataId = $(this).data("id");
+    var url = api.url+dataId;
+
+    console.log (dataId);
+    
+
+    $.getJSON(url,function(response){
+        
+        var tituloTarea=response.name;
+        var status= response.status[0];
+        
+        console.log(status);
+        console.log(response);
+        
+        modalTarea(tituloTarea,status);
+    })
+    
+
+};
+
+var modalTarea = function(tituloTarea,status){
+    
+    $("#tarea").text(tituloTarea);
+    $("#status").text(status);
+}
 
 
 $(document).ready(cargarPagina);
